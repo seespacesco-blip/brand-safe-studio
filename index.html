@@ -10,6 +10,8 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Premium Tactile Button Styles */
         .btn-primary {
             background-color: #0f172a; color: white;
             border-bottom: 4px solid #020617;
@@ -33,6 +35,7 @@
         .btn-gold:active:not(:disabled) { border-bottom-width: 0px; transform: translateY(4px); }
         .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; border-bottom-width: 0px; transform: translateY(4px); }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -51,6 +54,7 @@
         </div>
         <div class="flex gap-4 items-center">
             <button onclick="toggleModal('governanceModal')" class="text-xs font-semibold text-slate-600 hover:text-[#0f172a] bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full flex items-center gap-2 transition border border-slate-200">
+                <svg class="w-4 h-4 text-[#d4af37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                 Governance Policy
             </button>
             <div id="userBadge" class="hidden items-center gap-2 px-3 py-1.5 bg-white rounded-full text-xs font-medium border border-slate-200 shadow-sm">
@@ -63,24 +67,35 @@
     <div id="governanceModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 border border-slate-200 overflow-hidden">
             <div class="bg-[#0f172a] px-6 py-4 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-white">AI Governance & Approval Policy</h2>
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-[#d4af37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    AI Governance & Approval Policy
+                </h2>
                 <button onclick="toggleModal('governanceModal')" class="text-slate-400 hover:text-white">&times;</button>
             </div>
             <div class="p-6 space-y-6">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 class="font-bold text-slate-800 mb-2 border-b pb-2">AI is Permitted To:</h3>
+                        <h3 class="font-bold text-slate-800 mb-2 border-b border-slate-200 pb-2 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            AI is Permitted To:
+                        </h3>
                         <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
-                            <li>Generate initial creative drafts across multiple formats.</li>
+                            <li>Generate initial creative drafts across multiple formats (Social, Email, Visual).</li>
                             <li>Adapt brand tone based on target audience.</li>
                             <li>Scan human edits in real-time for compliance risks.</li>
+                            <li>Suggest fixes for flagged claims based on ground truth.</li>
                         </ul>
                     </div>
                     <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                        <h3 class="font-bold text-amber-900 mb-2 border-b pb-2">Human Accountability:</h3>
+                        <h3 class="font-bold text-amber-900 mb-2 border-b border-amber-200 pb-2 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            Human Accountability Required:
+                        </h3>
                         <ul class="text-sm text-amber-800 space-y-2 list-disc list-inside">
-                            <li><strong>Factual Verification:</strong> Checked against the factsheet.</li>
-                            <li><strong>Final Sign-Off:</strong> Mandatory human approval button.</li>
+                            <li><strong>Factual Verification:</strong> AI output must be checked against the product factsheet.</li>
+                            <li><strong>Final Sign-Off:</strong> AI cannot publish directly. A human must click "Approve".</li>
+                            <li><strong>Override Authority:</strong> Only humans can rewrite flagged content to ensure strict legal compliance.</li>
                         </ul>
                     </div>
                 </div>
@@ -89,16 +104,17 @@
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 text-white px-5 py-4 rounded-xl shadow-2xl hidden z-50 flex items-center gap-3">
+    <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 text-white px-5 py-4 rounded-xl shadow-2xl hidden z-50 flex items-center gap-3 transition-all transform translate-y-0">
+        <svg id="toastIcon" class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span id="toastMessage" class="text-sm font-medium"></span>
+        <button onclick="document.getElementById('toast').classList.add('hidden')" class="ml-4 font-bold text-slate-400 hover:text-white">&times;</button>
     </div>
 
     <main class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 relative">
         
-        <!-- Login View -->
-        <div id="view-login" class="max-w-md mx-auto mt-20 bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+        <div id="view-login" class="max-w-md mx-auto mt-20 bg-white p-8 rounded-2xl shadow-sm border border-slate-200 transition-all">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-[#0f172a] rounded-xl flex items-center justify-center text-[#d4af37] font-bold text-3xl mx-auto mb-4">L</div>
+                <div class="w-16 h-16 bg-[#0f172a] rounded-xl flex items-center justify-center text-[#d4af37] font-bold text-3xl mx-auto mb-4 shadow-inner">L</div>
                 <h2 class="text-2xl font-bold text-slate-900">Sign In</h2>
                 <p class="text-sm text-slate-500 mt-1">Access the Brand-Safe Studio</p>
             </div>
@@ -106,143 +122,280 @@
             <form onsubmit="handleLogin(event)" class="space-y-5">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider">Email Address</label>
-                    <input id="loginEmail" type="email" required class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none" placeholder="name@company.com">
+                    <input id="loginEmail" type="email" required class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#0f172a] outline-none transition" placeholder="name@company.com">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider">Password</label>
-                    <input id="loginPassword" type="password" required class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none" placeholder="••••••••">
+                    <input id="loginPassword" type="password" required class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-[#0f172a] outline-none transition" placeholder="••••••••">
                 </div>
-                <button type="submit" class="w-full btn-primary py-3.5 rounded-xl font-bold">Secure Login</button>
+                <button type="submit" class="w-full btn-primary py-3.5 rounded-xl font-bold flex justify-center items-center gap-2 mt-2 shadow-sm">
+                    Secure Login
+                </button>
             </form>
 
             <div class="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600">
-                <p class="font-bold text-slate-800 mb-2 uppercase tracking-wider text-[10px]">Demo Credentials</p>
-                <div class="flex justify-between border-b pb-2 mb-2"><span><strong>Admin:</strong> admin@demo.com</span><span class="text-slate-400">admin123</span></div>
-                <div class="flex justify-between"><span><strong>Creative:</strong> creative@demo.com</span><span class="text-slate-400">creative123</span></div>
+                <p class="font-bold text-slate-800 mb-2 uppercase tracking-wider text-[10px]">Demo Credentials (For Assessors)</p>
+                <div class="flex justify-between border-b border-slate-200 pb-2 mb-2">
+                    <span><strong>Admin:</strong> admin@demo.com</span>
+                    <span class="text-slate-400">PW: admin123</span>
+                </div>
+                <div class="flex justify-between">
+                    <span><strong>Creative:</strong> creative@demo.com</span>
+                    <span class="text-slate-400">PW: creative123</span>
+                </div>
             </div>
         </div>
 
-        <!-- Admin View -->
         <div id="view-admin" class="hidden space-y-6">
             <div class="flex justify-between items-end mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900">Brand Configurator</h2>
                     <p class="text-sm text-slate-500">Manage ground-truth knowledge bases for multiple brands.</p>
                 </div>
-                <button onclick="navigateTo('home')" class="btn-secondary px-5 py-2.5 rounded-lg text-sm font-semibold">Back to Dashboard</button>
+                <button onclick="navigateTo('home')" class="btn-secondary px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm">Back to Dashboard</button>
             </div>
-            <div class="flex flex-col md:flex-row gap-6">
-                <div class="w-full md:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 p-5 h-[600px] flex flex-col">
-                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2 flex justify-between">Registered Brands <button onclick="createNewBrand()" class="text-xs bg-slate-100 px-2 py-1 rounded">+ New</button></h3>
-                    <div id="admin-brand-list" class="space-y-2 flex-1 overflow-y-auto"></div>
-                </div>
-                <div class="w-full md:w-2/3 bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-[600px] flex flex-col">
-                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">Edit Brand Profile</h3>
-                    <input type="hidden" id="admin-brandId">
-                    <div class="space-y-4 flex-1 overflow-y-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase">Brand Name</label><input id="admin-brandName" type="text" class="w-full border rounded-lg p-2.5 text-sm"></div>
-                            <div><label class="text-[10px] font-bold text-slate-500 uppercase">Hero Product</label><input id="admin-product" type="text" class="w-full border rounded-lg p-2.5 text-sm"></div>
-                        </div>
-                        <div><label class="text-[10px] font-bold text-emerald-600 uppercase">Approved Specs</label><textarea id="admin-specs" rows="3" class="w-full border rounded-lg p-3 text-sm font-mono"></textarea></div>
-                        <div><label class="text-[10px] font-bold text-red-600 uppercase">Forbidden Claims</label><textarea id="admin-forbidden" rows="3" class="w-full border rounded-lg p-3 text-sm font-mono"></textarea></div>
-                        <div><label class="text-[10px] font-bold text-blue-600 uppercase">Visual Rules</label><textarea id="admin-visual" rows="3" class="w-full border rounded-lg p-3 text-sm font-mono"></textarea></div>
+            
+            <div class="flex flex-col md:flex-row gap-6 items-stretch">
+                <!-- Sidebar: Brand List -->
+                <div class="w-full md:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col h-[600px]">
+                    <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2 flex items-center justify-between">
+                        Registered Brands
+                        <button onclick="createNewBrand()" class="text-xs bg-slate-100 hover:bg-slate-200 text-[#0f172a] px-2 py-1 rounded transition">+ New</button>
+                    </h3>
+                    <div id="admin-brand-list" class="space-y-2 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Filled dynamically -->
                     </div>
-                    <div class="pt-4 border-t flex justify-end"><button onclick="saveBrandConfig()" class="btn-primary px-8 py-3 rounded-xl text-sm font-bold">Save Brand Rules</button></div>
+                </div>
+
+                <!-- Main Form: Brand Editor -->
+                <div class="w-full md:w-2/3 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-[600px] overflow-y-auto custom-scrollbar">
+                    <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-[#d4af37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        Edit Brand Profile
+                    </h3>
+                    
+                    <input type="hidden" id="admin-brandId">
+                    
+                    <div class="grid grid-cols-1 gap-5">
+                        <div class="grid grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Brand Name</label>
+                                <input id="admin-brandName" type="text" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-[#0f172a] outline-none transition bg-slate-50 focus:bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Hero Product / Focus</label>
+                                <input id="admin-product" type="text" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-[#0f172a] outline-none transition bg-slate-50 focus:bg-white">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-emerald-600 mb-1 uppercase tracking-wider">Approved Specs (Ground Truth)</label>
+                            <textarea id="admin-specs" rows="3" class="w-full border border-slate-300 rounded-lg p-3 text-sm font-mono text-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none transition bg-emerald-50/30"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-red-600 mb-1 uppercase tracking-wider">Forbidden Claims & Risks (Flags)</label>
+                            <textarea id="admin-forbidden" rows="3" class="w-full border border-slate-300 rounded-lg p-3 text-sm font-mono text-slate-700 focus:ring-2 focus:ring-red-500 outline-none transition bg-red-50/30"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-blue-600 mb-1 uppercase tracking-wider">Visual Brand Rules (For Image Gen)</label>
+                            <textarea id="admin-visual" rows="3" class="w-full border border-slate-300 rounded-lg p-3 text-sm font-mono text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition bg-blue-50/30"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-auto pt-6 border-t border-slate-100 flex justify-end">
+                        <button onclick="saveBrandConfig()" class="btn-primary px-8 py-3 rounded-xl text-sm font-bold shadow-sm">Save Brand Rules</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Home View -->
         <div id="view-home" class="hidden space-y-8">
-            <div class="flex justify-between items-end">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900">Workspace Dashboard</h2>
-                    <p class="text-sm text-slate-500 mt-1">Select a brand workspace synced from Supabase PostgreSQL.</p>
+                    <p class="text-sm text-slate-500 mt-1">Select a brand workspace to generate secure campaigns or configure ground-truth rules.</p>
                 </div>
-                <button onclick="navigateTo('admin')" id="editRulesBtn" class="hidden btn-secondary px-5 py-2.5 rounded-lg text-sm font-semibold">Brand Configurator</button>
+                <button onclick="navigateTo('admin')" id="editRulesBtn" class="hidden btn-secondary px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Brand Configurator
+                </button>
             </div>
-            <div id="home-brand-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex justify-between items-center">
-                <div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-1">Launch Campaign Studio</h3>
-                    <p class="text-sm text-slate-500">Generate multi-format content guarded by active brand rules.</p>
+
+            <div>
+                <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#d4af37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Active Brand Portfolio
+                </h3>
+                
+                <div id="home-brand-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Filled dynamically -->
                 </div>
-                <button onclick="navigateTo('studio')" class="btn-primary px-8 py-4 rounded-xl font-bold text-sm">Enter Workspace</button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden mt-8">
+                 <!-- Background decorative elements -->
+                 <div class="absolute -right-20 -top-20 w-64 h-64 bg-emerald-50 rounded-full blur-3xl opacity-70 pointer-events-none"></div>
+                 
+                 <div class="z-10 flex-1">
+                     <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-full mb-4 shadow-sm">
+                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Studio Ready
+                     </div>
+                     <h3 class="text-2xl font-bold text-slate-900 mb-2">Launch Campaign Studio</h3>
+                     <p class="text-sm text-slate-500 max-w-xl leading-relaxed">Enter the workspace to generate multi-format content (Social, Email, Visuals) securely guarded by the active brand rules and AI compliance auditor.</p>
+                 </div>
+                 
+                 <div class="z-10 w-full md:w-auto shrink-0">
+                     <button onclick="navigateTo('studio')" class="w-full md:w-auto btn-primary px-8 py-4 rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-3">
+                         Enter Workspace
+                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                     </button>
+                 </div>
             </div>
         </div>
 
-        <!-- Studio View -->
         <div id="view-studio" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 pb-20">
+            
+            <!-- Studio Left Column: Inputs & Rules -->
             <div class="lg:col-span-4 space-y-4">
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-lg font-bold text-slate-900" id="studio-brand-title">Campaign Brief</h2>
-                        <button onclick="navigateTo('home')" class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg">Back</button>
+                        <button onclick="navigateTo('home')" class="text-xs font-semibold text-slate-500 hover:text-slate-800 bg-slate-100 px-3 py-1.5 rounded-lg transition">Back</button>
                     </div>
+                    
                     <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">Target Audience</label>
-                    <select id="studio-audience" class="w-full border rounded-lg p-3 text-sm mb-5 bg-slate-50 outline-none">
+                    <select id="studio-audience" class="w-full border border-slate-300 rounded-lg p-3 text-sm mb-5 bg-slate-50 focus:ring-2 focus:ring-[#0f172a] outline-none transition">
                         <option value="Corporate B2B HR Directors">Corporate B2B HR Directors</option>
                         <option value="Direct-to-Consumer Holiday Shopper">Direct-to-Consumer Holiday Shopper</option>
                     </select>
+
                     <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">Campaign Hook</label>
-                    <textarea id="studio-hook" rows="4" class="w-full border rounded-lg p-3 text-sm mb-6 bg-slate-50 outline-none resize-none" placeholder="Enter hook..."></textarea>
-                    <button id="generateBtn" onclick="generateCampaign()" class="w-full btn-primary py-3.5 rounded-xl font-bold flex justify-center items-center gap-2 text-sm">
+                    <textarea id="studio-hook" rows="4" class="w-full border border-slate-300 rounded-lg p-3 text-sm mb-6 bg-slate-50 focus:ring-2 focus:ring-[#0f172a] outline-none transition resize-none" placeholder="e.g., Show gratitude with stress-free gifting..."></textarea>
+
+                    <button id="generateBtn" onclick="generateCampaign()" class="w-full btn-primary py-3.5 rounded-xl font-bold flex justify-center items-center gap-2 text-sm shadow-md">
                         <span>Generate & Audit Campaign</span>
                         <svg id="genSpinner" class="w-4 h-4 animate-spin hidden" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     </button>
                 </div>
-                <div class="bg-slate-100 p-5 rounded-xl border border-slate-200 text-xs">
-                    <h3 class="font-bold text-slate-800 uppercase tracking-wider mb-3">Active Guardrails</h3>
-                    <div id="studio-guardrails" class="space-y-3 text-slate-600 font-mono bg-white p-3 rounded-lg border"></div>
+
+                <div class="bg-slate-100 p-5 rounded-xl border border-slate-200 text-xs shadow-inner">
+                    <h3 class="font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Active Guardrails Applied
+                    </h3>
+                    <div id="studio-guardrails" class="space-y-3 text-slate-600 font-mono leading-relaxed bg-white p-3 rounded-lg border border-slate-200">
+                        <!-- Filled dynamically by JS -->
+                    </div>
                 </div>
             </div>
 
+            <!-- Studio Right Column: Outputs, Editor & Logs -->
             <div class="lg:col-span-8 flex flex-col gap-6">
+                
                 <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col relative min-h-[500px]">
+                    
+                    <!-- Empty State -->
                     <div id="studio-empty" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50/80 backdrop-blur-sm z-20">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-slate-200">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        </div>
                         <p class="font-medium text-slate-600 text-sm">Enter a brief and generate the campaign.</p>
                     </div>
-                    <div class="border-b bg-slate-50 px-3 pt-3 flex gap-2">
-                        <button onclick="switchTab('social')" id="tab-social" class="px-5 py-3 text-sm font-bold rounded-t-xl bg-white border-t border-l border-r text-[#0f172a] z-10 -mb-px">Social Draft</button>
-                        <button onclick="switchTab('email')" id="tab-email" class="px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:bg-slate-100">Email Copy</button>
-                        <button onclick="switchTab('image')" id="tab-image" class="px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:bg-slate-100">Visual Asset</button>
+
+                    <!-- Output Tabs -->
+                    <div class="border-b border-slate-200 bg-slate-50 px-3 pt-3 flex gap-2">
+                        <button onclick="switchTab('social')" id="tab-social" class="px-5 py-3 text-sm font-bold rounded-t-xl bg-white border-t border-l border-r border-slate-200 text-[#0f172a] z-10 -mb-px flex items-center gap-2">
+                            <svg class="w-4 h-4 text-pink-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            Social Draft
+                        </button>
+                        <button onclick="switchTab('email')" id="tab-email" class="px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition flex items-center gap-2">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            Email Copy
+                        </button>
+                        <button onclick="switchTab('image')" id="tab-image" class="px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition flex items-center gap-2">
+                            <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Visual Asset
+                        </button>
                     </div>
 
+                    <!-- Editor Workspace -->
                     <div class="p-6 flex-1 flex flex-col bg-white">
-                        <div id="compliance-status" class="hidden mb-5 p-4 rounded-xl text-sm font-medium flex flex-col gap-2 border shadow-sm"></div>
                         
+                        <!-- Compliance Alert Box -->
+                        <div id="compliance-status" class="hidden mb-5 p-4 rounded-xl text-sm font-medium flex items-start gap-3 border transition-colors duration-300 shadow-sm">
+                            <!-- Filled dynamically by JS -->
+                        </div>
+
+                        <!-- Text Draft Editor -->
                         <div id="editor-container" class="flex-1 flex flex-col hidden">
-                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Human Review & Edit Canvas (Real-Time Scan Active)</label>
-                            <textarea id="content-editor" class="flex-1 w-full border rounded-xl p-5 text-sm font-mono text-slate-800 bg-slate-50 min-h-[250px] outline-none"></textarea>
+                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider flex items-center gap-2">
+                                Human Review & Edit Canvas
+                                <span class="bg-slate-100 text-slate-400 px-2 py-0.5 rounded text-[10px]">Real-time Scan Active</span>
+                            </label>
+                            <textarea id="content-editor" class="flex-1 w-full border border-slate-300 rounded-xl p-5 text-sm font-mono text-slate-800 leading-relaxed focus:ring-2 focus:ring-[#0f172a] outline-none resize-none bg-slate-50 shadow-inner min-h-[250px] transition-shadow"></textarea>
+                            
                             <div class="flex justify-between items-center mt-5">
-                                <div id="audit-spinner" class="text-xs font-bold text-slate-500 hidden flex items-center gap-2">AI Agent Auditing Changes...</div>
-                                <button onclick="approveContent()" id="approveBtn" class="btn-gold px-8 py-3 rounded-xl text-sm font-bold shadow-sm disabled:opacity-50">Sign-Off & Approve</button>
+                                <div id="audit-spinner" class="text-xs font-bold text-slate-500 flex items-center gap-2 hidden px-3 py-1.5 bg-slate-100 rounded-lg">
+                                    <svg class="w-3.5 h-3.5 animate-spin text-[#d4af37]" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    AI Agent Auditing Changes...
+                                </div>
+                                <div class="ml-auto">
+                                    <button onclick="approveContent()" id="approveBtn" class="btn-gold px-8 py-3 rounded-xl text-sm font-bold shadow-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        Sign-Off & Approve
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div id="image-container" class="flex-1 flex flex-col hidden items-center justify-center bg-slate-50 rounded-xl border relative min-h-[350px]">
-                            <div id="img-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/90 z-10"><span class="text-xs font-bold text-slate-600 uppercase">Rendering Visual Asset...</span></div>
-                            <img id="generated-img" class="max-h-[400px] w-full object-contain hidden" alt="Generated Visual">
-                            <div class="absolute bottom-0 left-0 right-0 bg-white/95 p-4 border-t flex gap-3">
-                                <textarea id="img-prompt-editor" class="flex-1 text-xs border rounded-lg p-2.5 bg-slate-50 outline-none" rows="2"></textarea>
-                                <button onclick="regenerateImage()" class="btn-primary px-4 py-2 rounded-lg text-xs font-bold">Re-Render</button>
+                        <!-- Image Viewer & Generation -->
+                        <div id="image-container" class="flex-1 flex flex-col hidden items-center justify-center bg-slate-50 rounded-xl border border-slate-200 overflow-hidden relative min-h-[350px]">
+                            
+                            <div id="img-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/90 backdrop-blur z-10">
+                                <svg class="w-10 h-10 animate-spin text-[#0f172a] mb-3" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Rendering Visual Asset...</span>
+                            </div>
+                            
+                            <img id="generated-img" class="max-h-[400px] w-full object-contain hidden" alt="Generated Campaign Visual">
+                            
+                            <div class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-4 border-t border-slate-200 flex flex-col gap-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">AI Prompt (Editable based on visual rules)</label>
+                                <div class="flex gap-3 items-stretch">
+                                    <textarea id="img-prompt-editor" class="flex-1 text-xs border border-slate-300 rounded-lg p-2.5 bg-slate-50 resize-none outline-none focus:ring-2 focus:ring-[#0f172a]" rows="2"></textarea>
+                                    <button onclick="regenerateImage()" class="btn-primary px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap flex flex-col items-center justify-center">
+                                        <svg class="w-4 h-4 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                        Re-Render
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">Supabase Governance & Action Log</h3>
-                    <table class="w-full text-left text-sm border-collapse">
-                        <thead class="text-slate-500 bg-slate-50 border-b">
-                            <tr><th class="py-2.5 px-4 text-xs uppercase">Timestamp</th><th class="py-2.5 px-4 text-xs uppercase">Action</th><th class="py-2.5 px-4 text-xs uppercase">Format</th><th class="py-2.5 px-4 text-xs uppercase">User</th></tr>
-                        </thead>
-                        <tbody id="audit-log-body" class="divide-y text-slate-700">
-                            <tr><td colspan="4" class="py-6 text-center text-slate-400 italic">No logs recorded yet.</td></tr>
-                        </tbody>
-                    </table>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        Governance & Action Log
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead class="text-slate-500 bg-slate-50 border-b border-slate-200">
+                                <tr>
+                                    <th class="py-2.5 px-4 font-semibold text-xs uppercase tracking-wider">Timestamp</th>
+                                    <th class="py-2.5 px-4 font-semibold text-xs uppercase tracking-wider">Action Recorded</th>
+                                    <th class="py-2.5 px-4 font-semibold text-xs uppercase tracking-wider">Format</th>
+                                    <th class="py-2.5 px-4 font-semibold text-xs uppercase tracking-wider">User Identity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-log-body" class="divide-y divide-slate-100 text-slate-700">
+                                <tr><td colspan="4" class="py-6 text-center text-slate-400 italic text-sm">No actions logged in this session yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
             </div>
         </div>
     </main>
@@ -251,11 +404,16 @@
         // Supabase Initialization Configuration
         const SUPABASE_URL = 'https://sfevvedmgahtldrxxiqq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_YRumkWiciUPHswXaHLH81w_jqJnEIhw';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // State variables
         const state = {
-            role: null, user: null, activeBrandId: 'brand_1', brands: [],
-            adminEditingBrandId: null, activeTab: 'social',
+            role: null, // 'admin' or 'creative'
+            user: null, // email
+            activeBrandId: 'brand_1',
+            brands: [],
+            adminEditingBrandId: null,
+            activeTab: 'social',
             drafts: {
                 social: { text: "", status: "CLEAN", flags: [], suggestion: "" },
                 email: { text: "", status: "CLEAN", flags: [], suggestion: "" },
@@ -263,111 +421,183 @@
             }
         };
 
-        const defaultBrands = [{
-            id: 'brand_1', name: "Lumière Curated Gifts", product: "The Executive Recharge Box ($85.00)",
-            specs: "100% organic fair-trade coffee beans (250g)\nHand-poured soy wax candle (40 hr burn, Lavender & Amber)\nMatte ceramic commuter mug (BPA-free)\nComplimentary handwritten gift card",
-            forbidden: "Claiming the candle is organic (only coffee is organic)\nPromising overnight or 24-hour delivery guarantees\nUsing high-pressure sales words like CHEAPEST or LIMITED TIME PANIC",
-            visual: "Warm lifestyle aesthetic, premium feel. Natural window lighting."
-        }];
+        const defaultBrands = [
+            {
+                id: 'brand_1',
+                name: "Lumière Curated Gifts",
+                product: "The Executive Recharge Box ($85.00)",
+                specs: "100% organic fair-trade coffee beans (250g)\nHand-poured soy wax candle (40 hr burn, Lavender & Amber)\nMatte ceramic commuter mug (BPA-free)\nComplimentary handwritten gift card",
+                forbidden: "Claiming the candle is organic (only coffee is organic)\nPromising overnight or 24-hour delivery guarantees\nUsing high-pressure sales words like CHEAPEST or LIMITED TIME PANIC",
+                visual: "Warm lifestyle aesthetic, premium feel. No harsh studio flash, prefer natural window lighting. Uncluttered compositions focusing on the coffee and candle."
+            },
+            {
+                id: 'brand_2',
+                name: "AeroTech Athletics",
+                product: "AeroGlide Pro Running Shoes ($140.00)",
+                specs: "Carbon-fiber infused midsole plate\nBreathable engineered mesh upper\nWeight: 8.2 oz (Men's Size 9)\nMade with 20% recycled ocean plastics",
+                forbidden: "Claiming they guarantee a marathon PR or prevent all injuries\nClaiming they are 100% recycled (only 20% is)\nUsing competitor names in ads (e.g. Nike, Adidas)",
+                visual: "High energy, kinetic aesthetic. Focus on motion blur, urban running environments, sleek neon accents against dark backgrounds."
+            }
+        ];
 
-        function getActiveBrand() { return state.brands.find(b => b.id === state.activeBrandId) || state.brands[0]; }
-        function getAdminEditingBrand() { return state.brands.find(b => b.id === state.adminEditingBrandId) || state.brands[0]; }
-
-        function showToast(msg, type = 'success') {
-            const t = document.getElementById('toast');
-            t.classList.remove('hidden');
-            document.getElementById('toastMessage').innerText = msg;
-            setTimeout(() => t.classList.add('hidden'), 3000);
+        function getActiveBrand() {
+            return state.brands.find(b => b.id === state.activeBrandId) || state.brands[0];
         }
 
+        function getAdminEditingBrand() {
+            return state.brands.find(b => b.id === state.adminEditingBrandId) || state.brands[0];
+        }
+
+        // UI Toast Notification
+        function showToast(msg, type = 'error') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msgEl = document.getElementById('toastMessage');
+            
+            msgEl.innerText = msg;
+            toast.classList.remove('hidden', 'bg-slate-800', 'bg-emerald-600', 'bg-red-600');
+            
+            if (type === 'error') {
+                toast.classList.add('bg-red-600');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+                icon.classList.replace('text-emerald-400', 'text-white');
+            } else {
+                toast.classList.add('bg-emerald-600');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                icon.classList.replace('text-white', 'text-emerald-100');
+            }
+            
+            toast.classList.remove('translate-y-10', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 4000);
+        }
+
+        // Initialize Local App State with Supabase integration and robust Local Storage fallback
         async function initApp() {
             try {
                 const { data, error } = await supabaseClient.from('brands').select('*');
-                state.brands = (!error && data && data.length > 0) ? data : defaultBrands;
-            } catch(e) { state.brands = defaultBrands; }
-            state.activeBrandId = state.brands[0].id;
+                if (error) throw error;
+                if (data && data.length > 0) {
+                    state.brands = data;
+                } else {
+                    throw new Error("No data in cloud DB");
+                }
+            } catch (err) {
+                console.warn("Supabase fetch failed, falling back to local storage.", err);
+                const savedBrands = localStorage.getItem('lumiere_brands');
+                if (savedBrands) {
+                    state.brands = JSON.parse(savedBrands);
+                } else {
+                    state.brands = defaultBrands;
+                    localStorage.setItem('lumiere_brands', JSON.stringify(state.brands));
+                }
+            }
             
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                state.user = session.user.email;
-                state.role = state.user.includes('admin') ? 'admin' : 'creative';
-                document.getElementById('userBadge').classList.remove('hidden');
-                document.getElementById('userNameDisplay').innerText = state.role === 'admin' ? 'Brand Admin' : 'Creative Team';
-                if (state.role === 'admin') document.getElementById('editRulesBtn').classList.remove('hidden');
-                navigateTo('view-home');
-            } else { navigateTo('view-login'); }
-            loadAuditLogsFromSupabase();
-        }
-
-        async function loadAuditLogsFromSupabase() {
+            const savedBrandId = localStorage.getItem('lumiere_activeBrandId');
+            if(savedBrandId && state.brands.find(b => b.id === savedBrandId)) {
+                state.activeBrandId = savedBrandId;
+            } else {
+                state.activeBrandId = state.brands[0].id;
+            }
+            
             try {
-                const { data } = await supabaseClient.from('audit_logs').select('*').order('time', { ascending: false }).limit(15);
-                renderAuditLog(data || []);
-            } catch(e) { renderAuditLog([]); }
+                const { data, error } = await supabaseClient.from('logs').select('*').order('time', { ascending: false }).limit(15);
+                if (error) throw error;
+                if (data) renderAuditLog(data);
+            } catch (err) {
+                console.warn("Supabase log fetch failed, falling back to local storage.", err);
+                const savedLogs = localStorage.getItem('lumiere_logs');
+                if (savedLogs) renderAuditLog(JSON.parse(savedLogs).slice(0, 15));
+                else renderAuditLog([]);
+            }
         }
 
+        // Navigation & Modals
         window.toggleModal = (id) => document.getElementById(id).classList.toggle('hidden');
 
-        window.handleLogin = async (e) => {
+        window.handleLogin = (e) => {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const email = document.getElementById('loginEmail').value.toLowerCase();
             const password = document.getElementById('loginPassword').value;
 
-            let authSuccess = false;
-
-            // Instant bypass for demo credentials to guarantee login works
-            if ((email === 'admin@demo.com' && password === 'admin123') || (email === 'creative@demo.com' && password === 'creative123')) {
-                state.role = email.includes('admin') ? 'admin' : 'creative';
-                state.user = email;
-                authSuccess = true;
+            // Simple dummy authentication
+            if (email.includes('admin') && password === 'admin123') {
+                state.role = 'admin';
+            } else if (email.includes('creative') && password === 'creative123') {
+                state.role = 'creative';
             } else {
-                try {
-                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                    if (!error && data?.user) {
-                        state.user = data.user.email;
-                        state.role = state.user.includes('admin') ? 'admin' : 'creative';
-                        authSuccess = true;
-                    }
-                } catch(err) {}
+                return showToast("Invalid credentials. Try the demo accounts.", "error");
             }
 
-            if (!authSuccess) return showToast("Invalid credentials. Use admin@demo.com / admin123", "error");
-
+            state.user = email;
             document.getElementById('userBadge').classList.remove('hidden');
             document.getElementById('userNameDisplay').innerText = state.role === 'admin' ? 'Brand Admin' : 'Creative Team';
+            
             if (state.role === 'admin') document.getElementById('editRulesBtn').classList.remove('hidden');
+            else document.getElementById('editRulesBtn').classList.add('hidden');
+            
             showToast("Login Successful", "success");
             navigateTo('view-home');
         };
 
-        window.logout = async () => {
-            await supabaseClient.auth.signOut();
+        window.logout = () => {
+            state.role = null;
+            state.user = null;
+            document.getElementById('userBadge').classList.add('hidden');
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
             navigateTo('view-login');
         };
 
         window.navigateTo = (viewId) => {
             if (!viewId.startsWith('view-')) viewId = 'view-' + viewId;
-            ['view-login', 'view-admin', 'view-home', 'view-studio'].forEach(v => document.getElementById(v).classList.add('hidden'));
+            ['view-login', 'view-admin', 'view-home', 'view-studio'].forEach(v => {
+                document.getElementById(v).classList.add('hidden');
+            });
             document.getElementById(viewId).classList.remove('hidden');
+            
             if (viewId === 'view-admin') loadAdminData();
             if (viewId === 'view-home') loadHomeData();
             if (viewId === 'view-studio') loadStudioData();
         };
 
+        // Home View Data
         function loadHomeData() {
-            document.getElementById('home-brand-cards').innerHTML = state.brands.map(b => `
-                <div onclick="state.activeBrandId='${b.id}'; loadHomeData();" class="cursor-pointer p-5 rounded-xl border-2 ${b.id === state.activeBrandId ? 'border-[#0f172a] bg-[#0f172a] text-white' : 'border-slate-200 bg-white text-slate-800'}">
-                    <h4 class="font-bold text-base mb-1">${b.name}</h4>
-                    <p class="text-xs opacity-80">${b.product}</p>
-                </div>
-            `).join('');
+            const container = document.getElementById('home-brand-cards');
+            container.innerHTML = state.brands.map(b => {
+                const isActive = b.id === state.activeBrandId;
+                return `
+                    <div onclick="changeActiveBrand('${b.id}')" class="cursor-pointer transition-all duration-200 relative p-5 rounded-xl border-2 ${isActive ? 'border-[#0f172a] bg-[#0f172a] text-white shadow-lg transform -translate-y-1' : 'border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:shadow-md'}">
+                        ${isActive ? '<div class="absolute top-4 right-4 text-[#d4af37]"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></div>' : ''}
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg mb-3 ${isActive ? 'bg-white/10 text-[#d4af37]' : 'bg-slate-100 text-[#0f172a]'}">
+                            ${b.name.charAt(0)}
+                        </div>
+                        <h4 class="font-bold text-base mb-1 pr-8">${b.name}</h4>
+                        <p class="text-xs ${isActive ? 'text-slate-300' : 'text-slate-500'} line-clamp-2">${b.product || 'No hero product defined'}</p>
+                    </div>
+                `;
+            }).join('');
         }
 
+        window.changeActiveBrand = (id) => {
+            state.activeBrandId = id;
+            localStorage.setItem('lumiere_activeBrandId', id);
+            loadHomeData();
+        }
+
+        // Admin Configurator Data Handling
         function loadAdminData() {
-            if (!state.adminEditingBrandId) state.adminEditingBrandId = state.activeBrandId;
-            document.getElementById('admin-brand-list').innerHTML = state.brands.map(b => `
-                <button onclick="state.adminEditingBrandId='${b.id}'; loadAdminData();" class="w-full text-left px-4 py-3 rounded-lg text-sm border ${b.id === state.adminEditingBrandId ? 'bg-slate-50 font-bold' : ''}">${b.name}</button>
+            if(!state.adminEditingBrandId) state.adminEditingBrandId = state.activeBrandId;
+            
+            const list = document.getElementById('admin-brand-list');
+            list.innerHTML = state.brands.map(b => `
+                <button onclick="selectAdminBrand('${b.id}')" class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition border ${b.id === state.adminEditingBrandId ? 'bg-slate-50 border-slate-300 text-[#0f172a] shadow-sm' : 'border-transparent text-slate-500 hover:bg-slate-50'}">
+                    ${b.name}
+                </button>
             `).join('');
+
             const editing = getAdminEditingBrand();
             document.getElementById('admin-brandId').value = editing.id;
             document.getElementById('admin-brandName').value = editing.name;
@@ -377,153 +607,254 @@
             document.getElementById('admin-visual').value = editing.visual;
         }
 
+        window.selectAdminBrand = (id) => {
+            state.adminEditingBrandId = id;
+            loadAdminData();
+        }
+
         window.createNewBrand = () => {
             const newId = 'brand_' + Date.now();
-            state.brands.push({ id: newId, name: "New Brand", product: "", specs: "", forbidden: "", visual: "" });
+            const newBrand = {
+                id: newId,
+                name: "New Brand Profile",
+                product: "", specs: "", forbidden: "", visual: ""
+            };
+            state.brands.push(newBrand);
             state.adminEditingBrandId = newId;
             loadAdminData();
-        };
+        }
 
         window.saveBrandConfig = async () => {
-            const id = document.getElementById('admin-brandId').value;
-            const index = state.brands.findIndex(b => b.id === id);
-            if (index > -1) {
-                state.brands[index] = {
-                    id, name: document.getElementById('admin-brandName').value,
+            const idToSave = document.getElementById('admin-brandId').value;
+            const index = state.brands.findIndex(b => b.id === idToSave);
+            
+            if(index > -1) {
+                const updatedBrand = {
+                    id: idToSave,
+                    name: document.getElementById('admin-brandName').value || "Unnamed Brand",
                     product: document.getElementById('admin-product').value,
                     specs: document.getElementById('admin-specs').value,
                     forbidden: document.getElementById('admin-forbidden').value,
-                    visual: document.getElementById('admin-visual').value
+                    visual: document.getElementById('admin-visual').value,
                 };
-                await supabaseClient.from('brands').upsert(state.brands[index]);
-                showToast("Brand Saved & Synced!");
+
+                state.brands[index] = updatedBrand;
+                
+                // Fallback to local storage
+                localStorage.setItem('lumiere_brands', JSON.stringify(state.brands));
+                
+                // Sync to Cloud Supabase DB
+                try {
+                    await supabaseClient.from('brands').upsert(updatedBrand);
+                } catch (err) {
+                    console.warn("Supabase upsert failed.", err);
+                }
+
+                showToast("Brand Profile Saved Successfully", "success");
                 loadAdminData();
+                
+                if(idToSave === state.activeBrandId) loadHomeData();
             }
         };
 
+        // Studio Data Prep
         function loadStudioData() {
-            const b = getActiveBrand();
-            document.getElementById('studio-brand-title').innerText = `Campaign Brief - ${b.name}`;
-            document.getElementById('studio-guardrails').innerHTML = `<div><strong>Product:</strong> ${b.product}</div><div><strong>Rules:</strong> ${b.forbidden}</div>`;
+            const activeBrand = getActiveBrand();
+            document.getElementById('studio-brand-title').innerText = `Campaign Brief - ${activeBrand.name}`;
+            document.getElementById('studio-guardrails').innerHTML = `
+                <div class="mb-2"><span class="font-bold text-slate-800 text-[10px] uppercase">Product:</span> <span class="font-medium">${activeBrand.product}</span></div>
+                <div class="mt-2 pl-3 border-l-2 border-emerald-500">
+                    <p class="font-bold text-emerald-700 text-[10px] uppercase mb-1">Approved Ground Truth</p>
+                    <p class="whitespace-pre-wrap text-slate-700 leading-snug">${activeBrand.specs}</p>
+                </div>
+                <div class="mt-3 pl-3 border-l-2 border-red-500">
+                    <p class="font-bold text-red-700 text-[10px] uppercase mb-1">Forbidden Claims (Flags)</p>
+                    <p class="whitespace-pre-wrap text-slate-700 leading-snug">${activeBrand.forbidden}</p>
+                </div>
+            `;
             document.getElementById('studio-empty').classList.remove('hidden');
             document.getElementById('editor-container').classList.add('hidden');
             document.getElementById('image-container').classList.add('hidden');
             document.getElementById('compliance-status').classList.add('hidden');
         }
 
-        // Resilient Hybrid Gemini API Bridge (Tries Edge Function, falls back securely)
-        async function callGeminiUnified(promptText, systemInstruction, isImage = false) {
-            try {
-                const { data, error } = await supabaseClient.functions.invoke('generate-content', {
-                    body: { prompt: promptText, systemInstruction, modelType: isImage ? 'image' : 'text' }
-                });
-                if (!error && data && !data.error) return data;
-            } catch (err) {}
-
-            // Direct secure fallback if edge function is unrouted
-            const apiKey = "AIzaSyCPYihOy1l-zNX8smXoPUu7U4H9XkHzMw0";
-            const model = isImage ? 'gemini-3.1-flash-image' : 'gemini-3-flash-preview';
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        async function callTextGemini(promptText, systemInstruction, requireJson = true) {
+            const apiKey = "AIzaSyCPYihOy1l-zNX8smXoPUu7U4H9XkHzMw0"; 
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
             
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }],
-                systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
+                systemInstruction: { parts: [{ text: systemInstruction }] }
             };
-            if (isImage) {
-                payload.generationConfig = { responseModalities: ["TEXT", "IMAGE"], imageConfig: { aspectRatio: "1:1" } };
-            } else {
+
+            if (requireJson) {
                 payload.generationConfig = { responseMimeType: "application/json" };
             }
 
-            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            const result = await res.json();
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            
             if (result.error) throw new Error(result.error.message);
-            return result;
+            if (!result.candidates || !result.candidates[0].content) throw new Error("No valid content generated.");
+            
+            let text = result.candidates[0].content.parts[0].text;
+            
+            if (requireJson) {
+                text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+                return JSON.parse(text);
+            }
+            return text;
         }
 
-        async function callTextGemini(promptText, systemInstruction, requireJson = true) {
-            const data = await callGeminiUnified(promptText, systemInstruction, false);
-            const rawText = data.candidates[0].content.parts[0].text;
-            if (requireJson) {
-                let cleaned = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
-                return JSON.parse(cleaned);
-            }
-            return rawText;
+        async function callImageGemini(promptText) {
+            const apiKey = "AIzaSyCPYihOy1l-zNX8smXoPUu7U4H9XkHzMw0"; 
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: promptText }] }],
+                generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: "1:1" } }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            const result = await response.json();
+            if (result.error) throw new Error(result.error.message);
+            const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+            if (part) return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+            throw new Error("Failed to render visual asset.");
         }
 
         window.generateCampaign = async () => {
             const audience = document.getElementById('studio-audience').value;
             const hook = document.getElementById('studio-hook').value;
-            if (!hook) return showToast("Enter a campaign hook.", "error");
+            const btn = document.getElementById('generateBtn');
+            const spinner = document.getElementById('genSpinner');
+            const activeBrand = getActiveBrand();
             
-            document.getElementById('generateBtn').disabled = true;
-            document.getElementById('genSpinner').classList.remove('hidden');
-            const b = getActiveBrand();
+            if(!hook) return showToast("Please enter a campaign hook to generate content.", "error");
+
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            const sysPrompt = `You are a master copywriter and visual director for ${activeBrand.name}. 
+            Output strictly valid JSON. DO NOT use actual line breaks in string values, escape them as \\n.`;
+            
+            const userPrompt = `
+            Create a campaign for: ${audience}. Hook: ${hook}.
+            Product: ${activeBrand.product}
+            Specs to use: ${activeBrand.specs}
+            CRITICAL RULES: ${activeBrand.forbidden}
+            Visual Rules: ${activeBrand.visual}
+            
+            JSON Format exactly:
+            {
+                "social_post": "Write an engaging instagram caption with hashtags.",
+                "email_copy": "Write a short email with subject line and body.",
+                "image_prompt": "Write a highly detailed text-to-image prompt adhering strictly to the visual rules. Describe the composition, lighting, and objects."
+            }`;
 
             try {
-                const draftJson = await callTextGemini(
-                    `Create campaign for ${audience}. Hook: ${hook}. Product: ${b.product}. Specs: ${b.specs}. Rules: ${b.forbidden}. Visual: ${b.visual}. Return JSON with keys: social_post, email_copy, image_prompt`,
-                    "Return strictly valid JSON. Escape newlines as \\n."
-                );
+                // Pass 1: Generation
+                const draftJson = await callTextGemini(userPrompt, sysPrompt, true);
                 
                 state.drafts.social.text = draftJson.social_post;
                 state.drafts.email.text = draftJson.email_copy;
                 state.drafts.image.prompt = draftJson.image_prompt;
                 
                 document.getElementById('studio-empty').classList.add('hidden');
-                await runAuditor('social', draftJson.social_post);
-                await runAuditor('email', draftJson.email_copy);
-                logAction("Generated Campaign Drafts", "Social & Email");
+                
+                // Pass 2: Automatic Baseline Audit
+                await runAuditor('social', state.drafts.social.text);
+                await runAuditor('email', state.drafts.email.text);
+                
+                logAction("Generated Initial Campaign Drafts", "Social & Email", state.role);
+                
                 switchTab('social');
-                triggerImageGeneration();
+                triggerImageGeneration(); 
+
             } catch(e) {
-                showToast("Error: " + e.message, "error");
-                document.getElementById('studio-empty').classList.add('hidden');
+                showToast("Generation Error: " + e.message, "error");
+                document.getElementById('studio-empty').classList.remove('hidden');
             } finally {
-                document.getElementById('generateBtn').disabled = false;
-                document.getElementById('genSpinner').classList.add('hidden');
+                btn.disabled = false;
+                spinner.classList.add('hidden');
             }
         };
 
+        // The AI Auditor Engine
         async function runAuditor(format, text) {
-            const b = getActiveBrand();
+            const activeBrand = getActiveBrand();
+            const sysPrompt = "You are a strict Brand Compliance Auditor. Return ONLY valid JSON. Escape newlines as \\n.";
+            const userPrompt = `
+            Audit this drafted text: "${text}"
+            Against these rules for ${activeBrand.name}:
+            MUST NOT CONTAIN (FLAGS): ${activeBrand.forbidden}
+            MUST BE ACCURATE TO: ${activeBrand.specs}
+            If it violates ANY of the forbidden flags or makes up a feature not in the specs, FLAGGED must be true.
+            
+            JSON Format exactly:
+            {
+                "status": "PASS" or "FLAGGED",
+                "flags": ["list exact policy violations if flagged, else empty array"],
+                "suggestion": "string suggesting how to rewrite the sentence to fix it, or empty"
+            }`;
+
             try {
-                const res = await callTextGemini(
-                    `Audit text: "${text}". Forbidden: ${b.forbidden}. Specs: ${b.specs}. Return JSON with keys: status (PASS/FLAGGED), flags (array), suggestion (string)`,
-                    "Auditor role."
-                );
-                state.drafts[format].status = res.status.toUpperCase();
-                state.drafts[format].flags = res.flags || [];
-                state.drafts[format].suggestion = res.suggestion || "";
+                const auditResult = await callTextGemini(userPrompt, sysPrompt, true);
+                state.drafts[format].status = auditResult.status.toUpperCase();
+                state.drafts[format].flags = auditResult.flags || [];
+                state.drafts[format].suggestion = auditResult.suggestion || "";
+                
                 if (state.activeTab === format) renderEditorStatus(format);
-            } catch(e) {}
+            } catch(e) {
+                console.error("Audit failed", e);
+            }
         }
 
         let typingTimer;
         document.getElementById('content-editor').addEventListener('input', (e) => {
             const text = e.target.value;
             state.drafts[state.activeTab].text = text;
+            
             clearTimeout(typingTimer);
             document.getElementById('audit-spinner').classList.remove('hidden');
             document.getElementById('approveBtn').disabled = true;
+            
             typingTimer = setTimeout(async () => {
                 await runAuditor(state.activeTab, text);
                 document.getElementById('audit-spinner').classList.add('hidden');
                 document.getElementById('approveBtn').disabled = false;
-                logAction("Real-Time AI Scan Completed", state.activeTab);
-            }, 1200);
+                logAction("Real-Time AI Scan Completed", state.activeTab, state.role);
+            }, 1500); // 1.5 second pause triggers the AI
         });
 
         window.switchTab = (tab) => {
             state.activeTab = tab;
+            
             ['social', 'email', 'image'].forEach(t => {
-                document.getElementById(`tab-${t}`).className = t === tab ? "px-5 py-3 text-sm font-bold rounded-t-xl bg-white border-t border-l border-r text-[#0f172a] z-10 -mb-px" : "px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:bg-slate-100";
+                const el = document.getElementById(`tab-${t}`);
+                if(t === tab) {
+                    el.className = "px-5 py-3 text-sm font-bold rounded-t-xl bg-white border-t border-l border-r border-slate-200 text-[#0f172a] z-10 -mb-px flex items-center gap-2";
+                } else {
+                    el.className = "px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition flex items-center gap-2 border-t border-l border-r border-transparent";
+                }
             });
+
             if (tab === 'image') {
                 document.getElementById('editor-container').classList.add('hidden');
                 document.getElementById('compliance-status').classList.add('hidden');
                 document.getElementById('image-container').classList.remove('hidden');
+                document.getElementById('image-container').classList.add('flex');
                 document.getElementById('img-prompt-editor').value = state.drafts.image.prompt;
+                
                 if (state.drafts.image.base64) {
                     document.getElementById('generated-img').src = state.drafts.image.base64;
                     document.getElementById('generated-img').classList.remove('hidden');
@@ -531,8 +862,11 @@
                 }
             } else {
                 document.getElementById('image-container').classList.add('hidden');
+                document.getElementById('image-container').classList.remove('flex');
                 document.getElementById('editor-container').classList.remove('hidden');
+                document.getElementById('editor-container').classList.add('flex');
                 document.getElementById('compliance-status').classList.remove('hidden');
+                
                 document.getElementById('content-editor').value = state.drafts[tab].text;
                 renderEditorStatus(tab);
             }
@@ -541,42 +875,50 @@
         function renderEditorStatus(tab) {
             const box = document.getElementById('compliance-status');
             const data = state.drafts[tab];
-            const btn = document.getElementById('approveBtn');
+            const approveBtn = document.getElementById('approveBtn');
+            
             if (data.status === 'FLAGGED') {
-                btn.disabled = true;
-                box.className = "mb-5 p-4 rounded-xl text-sm border bg-red-50 border-red-200 text-red-800 shadow-sm";
-                box.innerHTML = `<div class="font-bold text-xs uppercase">Compliance Risks Detected</div><ul class="list-disc list-inside text-xs mt-1">${data.flags.map(f=>`<li>${f}</li>`).join('')}</ul><div class="mt-2 text-xs text-slate-700"><strong>Suggestion:</strong> ${data.suggestion}</div>`;
+                approveBtn.disabled = true;
+                box.className = "mb-5 p-4 rounded-xl text-sm font-medium flex flex-col gap-2 border bg-red-50 border-red-200 text-red-800 shadow-sm";
+                box.innerHTML = `
+                    <div class="flex items-center gap-2 font-bold uppercase tracking-wide text-xs text-red-700">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        Compliance Risks Detected (Edit to Fix)
+                    </div>
+                    <ul class="list-disc list-inside font-normal space-y-1 ml-1 text-red-700">
+                        ${data.flags.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                    <div class="mt-2 text-xs bg-white/70 p-2.5 rounded-lg border border-red-100 flex gap-2 items-start">
+                        <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <div><strong class="text-slate-800">Agent Fix Suggestion:</strong> <span class="text-slate-600">${data.suggestion}</span></div>
+                    </div>
+                `;
             } else {
-                btn.disabled = false;
-                box.className = "mb-5 p-3.5 rounded-xl text-sm border bg-emerald-50 border-emerald-200 text-emerald-800 shadow-sm flex items-center gap-3";
-                box.innerHTML = `<div class="font-bold text-xs">Pass: Brand Safe</div><div class="text-xs">Content aligns with ground truth.</div>`;
+                approveBtn.disabled = false;
+                box.className = "mb-5 p-3.5 rounded-xl text-sm font-medium flex items-center gap-3 border bg-emerald-50 border-emerald-200 text-emerald-800 shadow-sm";
+                box.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <div>
+                        <div class="font-bold uppercase tracking-wider text-xs text-emerald-700">Pass: Brand Safe</div>
+                        <div class="text-emerald-700 font-normal text-xs mt-0.5">Content aligns perfectly with ground truth specs.</div>
+                    </div>
+                `;
             }
         }
 
         async function triggerImageGeneration() {
-            if (!state.drafts.image.prompt) return;
+            if(!state.drafts.image.prompt) return;
             document.getElementById('img-loading').classList.remove('hidden');
             document.getElementById('generated-img').classList.add('hidden');
             try {
-                const data = await callGeminiUnified(state.drafts.image.prompt, null, true);
-                const parts = data?.candidates?.[0]?.content?.parts;
-                let b64 = null;
-                if (parts) {
-                    const imgPart = parts.find(p => p.inlineData || p.inline_data);
-                    if (imgPart) {
-                        const obj = imgPart.inlineData || imgPart.inline_data;
-                        b64 = `data:${obj.mimeType || 'image/png'};base64,${obj.data}`;
-                    }
-                }
-                if (!b64) throw new Error("No image data returned.");
-
+                const b64 = await callImageGemini(state.drafts.image.prompt);
                 state.drafts.image.base64 = b64;
-                document.getElementById('generated-img').src = b64;
-                document.getElementById('generated-img').classList.remove('hidden');
-                document.getElementById('img-loading').classList.add('hidden');
-                logAction("Rendered Visual Asset", "Image");
+                if(state.activeTab === 'image') switchTab('image'); 
+                logAction("Rendered Visual Asset", "Image", "System AI");
             } catch(e) {
-                showToast("Image generation failed: " + e.message, "error");
+                showToast("Visual Generation Failed: " + e.message, "error");
                 document.getElementById('img-loading').classList.add('hidden');
             }
         }
@@ -587,25 +929,59 @@
         };
 
         window.approveContent = () => {
-            logAction("Human Approved Final Draft", state.activeTab.toUpperCase());
-            showToast(`${state.activeTab.toUpperCase()} Approved & Finalized!`, "success");
+            const tab = state.activeTab;
+            const data = state.drafts[tab];
+            if (data.status === 'FLAGGED') {
+                return showToast("Cannot approve flagged content. Edit text to clear risks first.", "error");
+            }
+            logAction("Human Approved Final Draft", tab.toUpperCase(), state.role);
+            showToast(`${tab.toUpperCase()} Asset Approved & Finalized!`, "success");
         };
 
-        async function logAction(action, format) {
+        async function logAction(action, format, user) {
+            const displayUser = user === 'admin' ? 'Brand Admin' : (user === 'creative' ? 'Creative Team' : user);
+            const logEntry = {
+                time: Date.now(),
+                action: action,
+                format: format,
+                user: displayUser
+            };
+            
+            // Log locally 
+            let logs = JSON.parse(localStorage.getItem('lumiere_logs') || '[]');
+            logs.unshift(logEntry);
+            localStorage.setItem('lumiere_logs', JSON.stringify(logs));
+            renderAuditLog(logs.slice(0, 15));
+
+            // Sync with Supabase Cloud DB
             try {
-                const logEntry = { time: Date.now(), action, format, user_email: state.user || 'Demo User' };
-                await supabaseClient.from('audit_logs').insert([logEntry]);
-                loadAuditLogsFromSupabase();
-            } catch(e) {}
+                await supabaseClient.from('logs').insert(logEntry);
+            } catch (err) {
+                console.warn("Supabase log sync failed.", err);
+            }
         }
 
         function renderAuditLog(logs) {
             const tbody = document.getElementById('audit-log-body');
-            if (!logs || !logs.length) { tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400 italic">No logs recorded yet.</td></tr>'; return; }
-            tbody.innerHTML = logs.map(l => `<tr class="hover:bg-slate-50"><td class="py-3 px-4 font-mono text-xs">${new Date(l.time).toLocaleTimeString()}</td><td class="py-3 px-4 text-xs font-semibold">${l.action}</td><td class="py-3 px-4 text-xs">${l.format}</td><td class="py-3 px-4 text-xs">${l.user_email}</td></tr>`).join('');
+            if(logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400 italic text-sm">No actions logged in this session yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = logs.map(log => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3 px-4 text-slate-500 font-mono text-xs">${new Date(log.time).toLocaleTimeString()}</td>
+                    <td class="py-3 px-4 text-xs font-semibold ${log.action.includes('Approved') ? 'text-emerald-600' : (log.action.includes('Flagged') ? 'text-red-600' : 'text-slate-800')}">${log.action}</td>
+                    <td class="py-3 px-4 text-slate-600 text-xs">${log.format}</td>
+                    <td class="py-3 px-4 text-slate-500 text-xs font-medium">${log.user}</td>
+                </tr>
+            `).join('');
         }
 
-        initApp();
+        // Boot Application
+        initApp().then(() => {
+            navigateTo('view-login');
+        });
+
     </script>
 </body>
 </html>
