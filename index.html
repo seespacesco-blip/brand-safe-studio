@@ -408,8 +408,8 @@
 
         // State variables
         const state = {
-            role: null, // 'admin' or 'creative'
-            user: null, // email
+            role: null,
+            user: null,
             activeBrandId: 'brand_1',
             brands: [],
             adminEditingBrandId: null,
@@ -489,7 +489,6 @@
             
             state.activeBrandId = state.brands[0].id;
             
-            // Check active session via Supabase Auth
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 state.user = session.user.email;
@@ -526,11 +525,9 @@
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            // Authenticate using Supabase Auth
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             
             if (error) {
-                // Fallback for demo convenience if user hasn't created account in Supabase Auth yet
                 if ((email === 'admin@demo.com' && password === 'admin123') || (email === 'creative@demo.com' && password === 'creative123')) {
                     state.role = email.includes('admin') ? 'admin' : 'creative';
                     state.user = email;
@@ -650,7 +647,6 @@
                 
                 state.brands[index] = updatedBrand;
 
-                // Sync with Supabase PostgreSQL
                 const { error } = await supabaseClient.from('brands').upsert(updatedBrand);
                 if (error) {
                     showToast("Cloud sync error: " + error.message, "error");
@@ -684,7 +680,7 @@
             document.getElementById('compliance-status').classList.add('hidden');
         }
 
-        // Secure Gemini Calls via Supabase Edge Function Proxy (No exposed API keys)
+        // Secure Gemini Calls via Supabase Edge Function Proxy
         async function callSecureGemini(promptText, systemInstruction, modelType = 'text') {
             const { data, error } = await supabaseClient.functions.invoke('generate-content', {
                 body: { prompt: promptText, systemInstruction, modelType }
@@ -700,4 +696,264 @@
             const data = await callSecureGemini(promptText, systemInstruction, 'text');
             const rawText = data.candidates[0].content.parts[0].text;
             if (requireJson) {
-                let cleaned = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*
+                let cleaned = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+                return JSON.parse(cleaned);
+            }
+            return rawText;
+        }
+
+        async function callImageGemini(promptText) {
+            const data = await callSecureGemini(promptText, null, 'image');
+            
+            const parts = data?.candidates?.[0]?.content?.parts;
+            if (parts) {
+                const imagePart = parts.find(p => p.inlineData || p.inline_data);
+                if (imagePart) {
+                    const dataObj = imagePart.inlineData || imagePart.inline_data;
+                    return `data:${dataObj.mimeType || 'image/png'};base64,${dataObj.data}`;
+                }
+            }
+            
+            throw new Error("Failed to render visual asset.");
+        }
+
+        window.generateCampaign = async () => {
+            const audience = document.getElementById('studio-audience').value;
+            const hook = document.getElementById('studio-hook').value;
+            const btn = document.getElementById('generateBtn');
+            const spinner = document.getElementById('genSpinner');
+            const activeBrand = getActiveBrand();
+            
+            if(!hook) return showToast("Please enter a campaign hook to generate content.", "error");
+
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            const sysPrompt = `You are a master copywriter and visual director for ${activeBrand.name}. Output strictly valid JSON. DO NOT use actual line breaks in string values, escape them as \\n.`;
+            
+            const userPrompt = `
+            Create a campaign for: ${audience}. Hook: ${hook}.
+            Product: ${activeBrand.product}
+            Specs to use: ${activeBrand.specs}
+            CRITICAL RULES: ${activeBrand.forbidden}
+            Visual Rules: ${activeBrand.visual}
+            
+            JSON Format exactly:
+            {
+                "social_post": "Write an engaging instagram caption with hashtags.",
+                "email_copy": "Write a short email with subject line and body.",
+                "image_prompt": "Write a highly detailed text-to-image prompt adhering strictly to visual rules."
+            }`;
+
+            try {
+                const draftJson = await callTextGemini(userPrompt, sysPrompt, true);
+                
+                state.drafts.social.text = draftJson.social_post;
+                state.drafts.email.text = draftJson.email_copy;
+                state.drafts.image.prompt = draftJson.image_prompt;
+                
+                document.getElementById('studio-empty').classList.add('hidden');
+                
+                await runAuditor('social', state.drafts.social.text);
+                await runAuditor('email', state.drafts.email.text);
+                
+                logAction("Generated Initial Campaign Drafts", "Social & Email", state.role);
+                
+                switchTab('social');
+                triggerImageGeneration(); // Correctly named function call
+
+            } catch(e) {
+                showToast("Generation Error: " + e.message, "error");
+                document.getElementById('studio-empty').classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }
+        };
+
+        // The AI Auditor Engine
+        async function runAuditor(format, text) {
+            const activeBrand = getActiveBrand();
+            const sysPrompt = "You are a strict Brand Compliance Auditor. Return ONLY valid JSON. Escape newlines as \\n.";
+            const userPrompt = `
+            Audit this drafted text: "${text}"
+            Against these rules for ${activeBrand.name}:
+            MUST NOT CONTAIN (FLAGS): ${activeBrand.forbidden}
+            MUST BE ACCURATE TO: ${activeBrand.specs}
+            If it violates ANY of the forbidden flags or makes up a feature not in specs, FLAGGED must be true.
+            
+            JSON Format exactly:
+            {
+                "status": "PASS" or "FLAGGED",
+                "flags": ["list exact policy violations if flagged, else empty array"],
+                "suggestion": "string suggesting how to rewrite the sentence to fix it, or empty"
+            }`;
+
+            try {
+                const auditResult = await callTextGemini(userPrompt, sysPrompt, true);
+                state.drafts[format].status = auditResult.status.toUpperCase();
+                state.drafts[format].flags = auditResult.flags || [];
+                state.drafts[format].suggestion = auditResult.suggestion || "";
+                
+                if (state.activeTab === format) renderEditorStatus(format);
+            } catch(e) {
+                console.error("Audit failed", e);
+            }
+        }
+
+        let typingTimer;
+        document.getElementById('content-editor').addEventListener('input', (e) => {
+            const text = e.target.value;
+            state.drafts[state.activeTab].text = text;
+            
+            clearTimeout(typingTimer);
+            document.getElementById('audit-spinner').classList.remove('hidden');
+            document.getElementById('approveBtn').disabled = true;
+            
+            typingTimer = setTimeout(async () => {
+                await runAuditor(state.activeTab, text);
+                document.getElementById('audit-spinner').classList.add('hidden');
+                document.getElementById('approveBtn').disabled = false;
+                logAction("Real-Time AI Scan Completed", state.activeTab, state.role);
+            }, 1200);
+        });
+
+        window.switchTab = (tab) => {
+            state.activeTab = tab;
+            ['social', 'email', 'image'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if(t === tab) {
+                    el.className = "px-5 py-3 text-sm font-bold rounded-t-xl bg-white border-t border-l border-r border-slate-200 text-[#0f172a] z-10 -mb-px flex items-center gap-2";
+                } else {
+                    el.className = "px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition flex items-center gap-2 border-t border-l border-r border-transparent";
+                }
+            });
+
+            if (tab === 'image') {
+                document.getElementById('editor-container').classList.add('hidden');
+                document.getElementById('compliance-status').classList.add('hidden');
+                document.getElementById('image-container').classList.remove('hidden');
+                document.getElementById('image-container').classList.add('flex');
+                document.getElementById('img-prompt-editor').value = state.drafts.image.prompt;
+                
+                if (state.drafts.image.base64) {
+                    document.getElementById('generated-img').src = state.drafts.image.base64;
+                    document.getElementById('generated-img').classList.remove('hidden');
+                    document.getElementById('img-loading').classList.add('hidden');
+                }
+            } else {
+                document.getElementById('image-container').classList.add('hidden');
+                document.getElementById('image-container').classList.remove('flex');
+                document.getElementById('editor-container').classList.remove('hidden');
+                document.getElementById('editor-container').classList.add('flex');
+                document.getElementById('compliance-status').classList.remove('hidden');
+                
+                document.getElementById('content-editor').value = state.drafts[tab].text;
+                renderEditorStatus(tab);
+            }
+        };
+
+        function renderEditorStatus(tab) {
+            const box = document.getElementById('compliance-status');
+            const data = state.drafts[tab];
+            const approveBtn = document.getElementById('approveBtn');
+            
+            if (data.status === 'FLAGGED') {
+                approveBtn.disabled = true;
+                box.className = "mb-5 p-4 rounded-xl text-sm font-medium flex flex-col gap-2 border bg-red-50 border-red-200 text-red-800 shadow-sm";
+                box.innerHTML = `
+                    <div class="flex items-center gap-2 font-bold uppercase tracking-wide text-xs text-red-700">Compliance Risks Detected (Edit to Fix)</div>
+                    <ul class="list-disc list-inside font-normal space-y-1 ml-1 text-red-700">${data.flags.map(f => `<li>${f}</li>`).join('')}</ul>
+                    <div class="mt-2 text-xs bg-white/70 p-2.5 rounded-lg border border-red-100 flex gap-2 items-start">
+                        <div><strong class="text-slate-800">Agent Fix Suggestion:</strong> <span class="text-slate-600">${data.suggestion}</span></div>
+                    </div>
+                `;
+            } else {
+                approveBtn.disabled = false;
+                box.className = "mb-5 p-3.5 rounded-xl text-sm font-medium flex items-center gap-3 border bg-emerald-50 border-emerald-200 text-emerald-800 shadow-sm";
+                box.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">✓</div>
+                    <div>
+                        <div class="font-bold uppercase tracking-wider text-xs text-emerald-700">Pass: Brand Safe</div>
+                        <div class="text-emerald-700 font-normal text-xs mt-0.5">Content aligns perfectly with ground truth specs.</div>
+                    </div>
+                `;
+            }
+        }
+
+        async function triggerImageGeneration() {
+            if (!state.drafts.image.prompt) return;
+            document.getElementById('img-loading').classList.remove('hidden');
+            document.getElementById('generated-img').classList.add('hidden');
+            try {
+                let b64 = await callImageGemini(state.drafts.image.prompt);
+                
+                if (typeof b64 === 'object' && b64 !== null) {
+                    const dataObj = b64.inlineData || b64.inline_data;
+                    b64 = dataObj ? `data:${dataObj.mimeType || 'image/png'};base64,${dataObj.data}` : null;
+                }
+                
+                if (!b64 || typeof b64 !== 'string') throw new Error("Invalid image payload returned.");
+
+                state.drafts.image.base64 = b64;
+                document.getElementById('generated-img').src = b64;
+                document.getElementById('generated-img').classList.remove('hidden');
+                document.getElementById('img-loading').classList.add('hidden');
+                
+                logAction("Rendered Visual Asset", "Image", state.role);
+            } catch(e) {
+                showToast("Visual Generation Failed: " + (e.message || "Unknown error"), "error");
+                document.getElementById('img-loading').classList.add('hidden');
+            }
+        }
+
+        window.regenerateImage = () => {
+            state.drafts.image.prompt = document.getElementById('img-prompt-editor').value;
+            triggerImageGeneration();
+        };
+
+        window.approveContent = () => {
+            const tab = state.activeTab;
+            const data = state.drafts[tab];
+            if (data.status === 'FLAGGED') {
+                return showToast("Cannot approve flagged content. Edit text to clear risks first.", "error");
+            }
+            logAction("Human Approved Final Draft", tab.toUpperCase(), state.role);
+            showToast(`${tab.toUpperCase()} Asset Approved & Finalized!`, "success");
+        };
+
+        // Supabase Audit Logging
+        async function logAction(action, format, user) {
+            const displayUser = user === 'admin' ? 'Brand Admin' : (user === 'creative' ? 'Creative Team' : (user || 'System'));
+            const logEntry = {
+                time: Date.now(),
+                action: action,
+                format: format,
+                user_email: displayUser
+            };
+            
+            await supabaseClient.from('audit_logs').insert([logEntry]);
+            loadAuditLogsFromSupabase();
+        }
+
+        function renderAuditLog(logs) {
+            const tbody = document.getElementById('audit-log-body');
+            if(!logs || logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400 italic text-sm">No actions logged in this session yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = logs.map(log => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3 px-4 text-slate-500 font-mono text-xs">${new Date(log.time).toLocaleTimeString()}</td>
+                    <td class="py-3 px-4 text-xs font-semibold ${log.action.includes('Approved') ? 'text-emerald-600' : 'text-slate-800'}">${log.action}</td>
+                    <td class="py-3 px-4 text-slate-600 text-xs">${log.format}</td>
+                    <td class="py-3 px-4 text-slate-500 text-xs font-medium">${log.user_email || log.user}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Boot Application
+        initApp();
+    </script>
+</body>
+</html>
