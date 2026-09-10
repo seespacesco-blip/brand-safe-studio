@@ -273,6 +273,22 @@
                     <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">Campaign Hook</label>
                     <textarea id="studio-hook" rows="4" class="w-full border border-slate-300 rounded-lg p-3 text-sm mb-6 bg-slate-50 focus:ring-2 focus:ring-[#0f172a] outline-none transition resize-none" placeholder="e.g., Show gratitude with stress-free gifting..."></textarea>
 
+                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">Formats to Generate</label>
+                    <div class="flex flex-col gap-2 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <label class="flex items-center gap-3 text-sm font-medium text-slate-700 cursor-pointer">
+                            <input type="checkbox" id="gen-social" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500"> 
+                            Social Draft
+                        </label>
+                        <label class="flex items-center gap-3 text-sm font-medium text-slate-700 cursor-pointer">
+                            <input type="checkbox" id="gen-email" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500"> 
+                            Email Copy
+                        </label>
+                        <label class="flex items-center gap-3 text-sm font-medium text-slate-700 cursor-pointer">
+                            <input type="checkbox" id="gen-image" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500"> 
+                            Visual Asset
+                        </label>
+                    </div>
+
                     <button id="generateBtn" onclick="generateCampaign()" class="w-full btn-primary py-3.5 rounded-xl font-bold flex justify-center items-center gap-2 text-sm shadow-md">
                         <span>Generate & Audit Campaign</span>
                         <svg id="genSpinner" class="w-4 h-4 animate-spin hidden" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -298,7 +314,7 @@
                     <!-- Empty State -->
                     <div id="studio-empty" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50/80 backdrop-blur-sm z-20">
                         <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 border border-slate-200">
-                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         </div>
                         <p class="font-medium text-slate-600 text-sm">Enter a brief and generate the campaign.</p>
                     </div>
@@ -376,7 +392,7 @@
 
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                     <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                         Governance & Action Log
                     </h3>
                     <div class="overflow-x-auto">
@@ -678,58 +694,51 @@
             document.getElementById('compliance-status').classList.add('hidden');
         }
 
+        // ==========================================
+        // EDGE FUNCTION PROXY INTEGRATION 
+        // ==========================================
         async function callTextGemini(promptText, systemInstruction, requireJson = true) {
-            const apiKey = "AIzaSyCPYihOy1l-zNX8smXoPUu7U4H9XkHzMw0"; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                systemInstruction: { parts: [{ text: systemInstruction }] }
-            };
+            try {
+                // Call the Supabase Edge Function instead of Google directly
+                const { data, error } = await supabaseClient.functions.invoke('gemini-proxy', {
+                    body: { 
+                        type: 'text', 
+                        promptText: promptText, 
+                        systemInstruction: systemInstruction, 
+                        requireJson: requireJson 
+                    }
+                });
 
-            if (requireJson) {
-                payload.generationConfig = { responseMimeType: "application/json" };
+                if (error) throw new Error("Edge Function Connection Error: " + error.message);
+                if (data?.error) throw new Error(data.error);
+                if (!data?.result) throw new Error("No valid content generated.");
+                
+                return data.result;
+            } catch (err) {
+                console.error("Text Generation failed:", err);
+                throw err;
             }
-
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
-            
-            if (result.error) throw new Error(result.error.message);
-            if (!result.candidates || !result.candidates[0].content) throw new Error("No valid content generated.");
-            
-            let text = result.candidates[0].content.parts[0].text;
-            
-            if (requireJson) {
-                text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
-                return JSON.parse(text);
-            }
-            return text;
         }
 
         async function callImageGemini(promptText) {
-            const apiKey = "AIzaSyCPYihOy1l-zNX8smXoPUu7U4H9XkHzMw0"; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: promptText }] }],
-                generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: "1:1" } }
-            };
+            try {
+                // Call the Supabase Edge Function for images
+                const { data, error } = await supabaseClient.functions.invoke('gemini-proxy', {
+                    body: { 
+                        type: 'image', 
+                        promptText: promptText 
+                    }
+                });
 
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            
-            const result = await response.json();
-            if (result.error) throw new Error(result.error.message);
-            const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-            if (part) return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-            throw new Error("Failed to render visual asset.");
+                if (error) throw new Error("Edge Function Connection Error: " + error.message);
+                if (data?.error) throw new Error(data.error);
+                if (!data?.result) throw new Error("Failed to render visual asset.");
+                
+                return data.result; // This will be the base64 image string
+            } catch (err) {
+                console.error("Image Generation failed:", err);
+                throw err;
+            }
         }
 
         window.generateCampaign = async () => {
@@ -739,14 +748,33 @@
             const spinner = document.getElementById('genSpinner');
             const activeBrand = getActiveBrand();
             
+            const doSocial = document.getElementById('gen-social').checked;
+            const doEmail = document.getElementById('gen-email').checked;
+            const doImage = document.getElementById('gen-image').checked;
+
+            if(!doSocial && !doEmail && !doImage) {
+                return showToast("Please select at least one format to generate.", "error");
+            }
+
             if(!hook) return showToast("Please enter a campaign hook to generate content.", "error");
 
             btn.disabled = true;
             spinner.classList.remove('hidden');
 
+            // Reset drafts for unchecked formats
+            if (!doSocial) state.drafts.social = { text: "", status: "CLEAN", flags: [], suggestion: "" };
+            if (!doEmail) state.drafts.email = { text: "", status: "CLEAN", flags: [], suggestion: "" };
+            if (!doImage) state.drafts.image = { prompt: "", base64: null };
+
             const sysPrompt = `You are a master copywriter and visual director for ${activeBrand.name}. 
             Output strictly valid JSON. DO NOT use actual line breaks in string values, escape them as \\n.`;
             
+            let jsonFormat = "{\n";
+            if (doSocial) jsonFormat += '  "social_post": "Write an engaging instagram caption with hashtags.",\n';
+            if (doEmail) jsonFormat += '  "email_copy": "Write a short email with subject line and body.",\n';
+            if (doImage) jsonFormat += '  "image_prompt": "Write a highly detailed text-to-image prompt adhering strictly to the visual rules. Describe the composition, lighting, and objects."\n';
+            jsonFormat += "}";
+
             const userPrompt = `
             Create a campaign for: ${audience}. Hook: ${hook}.
             Product: ${activeBrand.product}
@@ -755,30 +783,34 @@
             Visual Rules: ${activeBrand.visual}
             
             JSON Format exactly:
-            {
-                "social_post": "Write an engaging instagram caption with hashtags.",
-                "email_copy": "Write a short email with subject line and body.",
-                "image_prompt": "Write a highly detailed text-to-image prompt adhering strictly to the visual rules. Describe the composition, lighting, and objects."
-            }`;
+            ${jsonFormat}`;
 
             try {
-                // Pass 1: Generation
+                // Pass 1: Generation via Edge Function
                 const draftJson = await callTextGemini(userPrompt, sysPrompt, true);
                 
-                state.drafts.social.text = draftJson.social_post;
-                state.drafts.email.text = draftJson.email_copy;
-                state.drafts.image.prompt = draftJson.image_prompt;
+                if (doSocial) state.drafts.social.text = draftJson.social_post || "";
+                if (doEmail) state.drafts.email.text = draftJson.email_copy || "";
+                if (doImage) state.drafts.image.prompt = draftJson.image_prompt || "";
                 
                 document.getElementById('studio-empty').classList.add('hidden');
                 
-                // Pass 2: Automatic Baseline Audit
-                await runAuditor('social', state.drafts.social.text);
-                await runAuditor('email', state.drafts.email.text);
+                // Pass 2: Automatic Baseline Audit via Edge Function
+                if (doSocial) await runAuditor('social', state.drafts.social.text);
+                if (doEmail) await runAuditor('email', state.drafts.email.text);
                 
-                logAction("Generated Initial Campaign Drafts", "Social & Email", state.role);
+                let generatedFormats = [];
+                if(doSocial) generatedFormats.push("Social");
+                if(doEmail) generatedFormats.push("Email");
+                if(doImage) generatedFormats.push("Image");
+                logAction("Generated Initial Campaign Drafts", generatedFormats.join(" & "), state.role);
                 
-                switchTab('social');
-                triggerImageGeneration(); 
+                // Switch to the first selected tab
+                if (doSocial) switchTab('social');
+                else if (doEmail) switchTab('email');
+                else if (doImage) switchTab('image');
+
+                if (doImage) triggerImageGeneration(); 
 
             } catch(e) {
                 showToast("Generation Error: " + e.message, "error");
@@ -845,6 +877,12 @@
                     el.className = "px-5 py-3 text-sm font-bold rounded-t-xl bg-white border-t border-l border-r border-slate-200 text-[#0f172a] z-10 -mb-px flex items-center gap-2";
                 } else {
                     el.className = "px-5 py-3 text-sm font-medium rounded-t-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition flex items-center gap-2 border-t border-l border-r border-transparent";
+                }
+                
+                // Hide tabs that weren't selected for generation
+                const isChecked = document.getElementById(`gen-${t}`)?.checked;
+                if(isChecked === false) {
+                    el.classList.add('hidden');
                 }
             });
 
